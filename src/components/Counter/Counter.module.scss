@@ -1,0 +1,42 @@
+@import '../../styles/base/mixins';
+
+.counter {
+  padding: 1rem;
+  border: 3px solid #6fe0f8;
+  background-color: #2d2a35;
+  min-width: em(320);
+}
+
+.counterDisplay {
+  min-height: 12.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1rem;
+  background-color: #6fe0f8;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.counterDisplay label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.counterDisplay label input {
+  text-align: center;
+  outline: none;
+  padding: 0.5em;
+  min-height: 2.428571428571429rem;
+}
+
+.counterControl {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 10px;
+  border: 3px solid #6fe0f8;
+}
