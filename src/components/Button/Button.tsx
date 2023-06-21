@@ -4,8 +4,10 @@ import cls from './Button.module.scss'
 
 type PropsType = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
 export const Button: FC<PropsType> = ({ children, className, ...rest }) => {
+  const buttonStyles = cls.btn + className ? ' ' + className : ''
+
   return (
-    <button className={cls.btn + (className ? ' ' + className : '')} {...rest}>
+    <button className={buttonStyles} {...rest}>
       {children}
     </button>
   )
