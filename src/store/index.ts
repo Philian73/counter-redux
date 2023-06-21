@@ -2,7 +2,6 @@ import { AnyAction, combineReducers, legacy_createStore } from 'redux'
 import { ThunkAction, ThunkDispatch } from 'redux-thunk'
 
 import { countersReducer } from './reducers/countersReducer.ts'
-import { settingsCountersReducer } from './reducers/settingsCountersReducer.ts'
 
 export type AppDispatchType = ThunkDispatch<AppRootStateType, unknown, AnyAction>
 export type AppThunkType<ReturnType = void> = ThunkAction<
@@ -20,7 +19,6 @@ export type AppRootStateType = ReturnType<typeof store.getState>
 
 const rootReducer = combineReducers({
   counters: countersReducer,
-  settingsCounters: settingsCountersReducer,
 })
 
 export const store = legacy_createStore(rootReducer)
