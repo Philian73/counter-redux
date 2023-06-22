@@ -3,3 +3,5 @@ export type CounterType = {
   minValue: number
   maxValue: number
 }
+
+export type CounterInputModelType = Omit<CounterType, 'id'> & { currentValue: number }
