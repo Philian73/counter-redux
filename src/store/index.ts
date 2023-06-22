@@ -1,5 +1,5 @@
-import { AnyAction, combineReducers, legacy_createStore } from 'redux'
-import { ThunkAction, ThunkDispatch } from 'redux-thunk'
+import { AnyAction, applyMiddleware, combineReducers, legacy_createStore } from 'redux'
+import thunk, { ThunkAction, ThunkDispatch } from 'redux-thunk'
 
 import { countersReducer } from './reducers/countersReducer.ts'
 
@@ -21,7 +21,7 @@ const rootReducer = combineReducers({
   counters: countersReducer,
 })
 
-export const store = legacy_createStore(rootReducer)
+export const store = legacy_createStore(rootReducer, applyMiddleware(thunk))
 
 // @ts-ignore
 window.__store__ = store
