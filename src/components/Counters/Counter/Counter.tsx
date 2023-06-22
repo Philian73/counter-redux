@@ -2,7 +2,8 @@ import { ChangeEvent, FC, memo, useState } from 'react'
 
 import { useDispatch } from 'react-redux'
 
-import { actions } from '../../../store/reducers/countersReducer.ts'
+import { AppDispatchType } from '../../../store'
+import { updateSettings } from '../../../store/reducers/countersReducer.ts'
 import { CounterInputModelType, CounterType } from '../../../types'
 import { Button } from '../../Button/Button.tsx'
 
@@ -22,7 +23,7 @@ export const Counter: FC<PropsType> = memo(({ counter }) => {
 
   const { minValue, maxValue, currentValue } = values
 
-  const dispatch = useDispatch()
+  const dispatch = useDispatch<AppDispatchType>()
 
   const increment = () => {
     if (currentValue < maxValue) {
@@ -33,11 +34,11 @@ export const Counter: FC<PropsType> = memo(({ counter }) => {
     setValues(prev => ({ ...prev, currentValue: minValue }))
   }
   const changeModeToSettings = () => {
-    !status && setStatus('Изменение настроек')
+    !status && setStatus('Настройка счётчика')
   }
   const saveChanges = () => {
     if (minValue < maxValue) {
-      dispatch(actions.changeSetting(counter.id, minValue, maxValue))
+      dispatch(updateSettings(counter.id, minValue, maxValue))
       setStatus('')
       reset()
     }
@@ -56,6 +57,10 @@ export const Counter: FC<PropsType> = memo(({ counter }) => {
     if (valueToNumber > minValue) {
       setValues(prev => ({ ...prev, maxValue: valueToNumber }))
     }
+  }
+
+  if (counter.minValue === 0 && counter.maxValue === 0) {
+    changeModeToSettings()
   }
 
   return (
