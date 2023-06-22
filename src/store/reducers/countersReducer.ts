@@ -1,25 +1,38 @@
 import { v1 } from 'uuid'
 
+import { CounterType } from '../../types'
 import { InferActionTypes } from '../index.ts'
 
 type ActionsType = InferActionTypes<typeof actions>
 
-type InitialStateType = typeof initialState
+const initialState = [
+  { id: v1(), minValue: 0, maxValue: 5 },
+  { id: v1(), minValue: 0, maxValue: 5 },
+  { id: v1(), minValue: 0, maxValue: 5 },
+] as CounterType[]
 
-export const testId = 'test-id-1'
-export const testId2 = 'test-id-2'
-
-const initialState = [{ id: testId }, { id: testId2 }]
-
-export const countersReducer = (state = initialState, action: ActionsType): InitialStateType => {
+export const countersReducer = (state = initialState, action: ActionsType): CounterType[] => {
   switch (action.type) {
-    case 'ADD-COUNTER':
-      return [...state, { id: action.payload.id }]
+    case 'ADD-COUNTER': {
+      return [
+        ...state,
+        { id: v1(), minValue: action.payload.minValue, maxValue: action.payload.maxValue },
+      ]
+    }
+    case 'CHANGE-SETTINGS':
+      return state.map(counter =>
+        counter.id === action.payload.id
+          ? { ...counter, minValue: action.payload.minValue, maxValue: action.payload.maxValue }
+          : counter
+      )
     default:
       return state
   }
 }
 
 export const actions = {
-  addCounter: () => ({ type: 'ADD-COUNTER', payload: { id: v1() } } as const),
+  addCounter: (minValue: number, maxValue: number) =>
+    ({ type: 'ADD-COUNTER', payload: { minValue, maxValue } } as const),
+  changeSetting: (id: string, minValue: number, maxValue: number) =>
+    ({ type: 'CHANGE-SETTINGS', payload: { id, minValue, maxValue } } as const),
 }
