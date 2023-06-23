@@ -10,8 +10,6 @@ import { Button } from '../Button/Button.tsx'
 import { Counter } from './Counter/Counter.tsx'
 
 export const Counters = () => {
-  console.log('CounterSSSS rendering')
-
   const counters = useSelector<AppRootStateType, CounterType[]>(state => state.counters)
   const dispatch = useDispatch<AppDispatchType>()
 

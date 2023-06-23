@@ -7,7 +7,6 @@ import { updateSettings } from '../../../../store/reducers/countersReducer.ts'
 import { CounterInputModelType, CounterType } from '../../../../types'
 
 export const useCounterLogic = (counter: CounterType) => {
-  console.log('Counter rendering')
   const [status, setStatus] = useState('')
   const [values, setValues] = useState<CounterInputModelType>({
     minValue: counter.minValue,
