@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -9,8 +9,7 @@ import { Button } from '../Button/Button.tsx'
 
 import { Counter } from './Counter/Counter.tsx'
 
-type PropsType = {}
-export const Counters: FC<PropsType> = ({}) => {
+export const Counters = () => {
   console.log('CounterSSSS rendering')
 
   const counters = useSelector<AppRootStateType, CounterType[]>(state => state.counters)
@@ -20,6 +19,11 @@ export const Counters: FC<PropsType> = ({}) => {
     dispatch(getCounters())
   }, [])
 
+  // название поменять
+  const addCounterCallback = useCallback(() => {
+    dispatch(addCounter())
+  }, [dispatch])
+
   const countersMap = counters.map(counter => {
     return <Counter key={counter.id} counter={counter} />
   })
@@ -28,7 +32,7 @@ export const Counters: FC<PropsType> = ({}) => {
     <>
       <div>{countersMap}</div>
       <div>
-        <Button onClick={() => dispatch(addCounter())}>Добавить счётчик</Button>
+        <Button onClick={addCounterCallback}>Добавить счётчик</Button>
       </div>
     </>
   )
