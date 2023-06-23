@@ -58,15 +58,15 @@ export const useCounterLogic = (counter: CounterType) => {
   }
 
   return {
+    status,
     currentValue,
     minValue,
-    onChangeMinValue,
     maxValue,
-    increment,
-    changeModeToSettings,
-    saveChanges,
-    reset,
+    onChangeMinValue,
     onChangeMaxValue,
-    status,
+    changeModeToSettings,
+    increment,
+    reset,
+    saveChanges,
   }
 }
