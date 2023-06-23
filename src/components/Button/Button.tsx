@@ -1,9 +1,9 @@
-import { ButtonHTMLAttributes, DetailedHTMLProps, FC } from 'react'
+import { ButtonHTMLAttributes, DetailedHTMLProps, FC, memo } from 'react'
 
 import cls from './Button.module.scss'
 
 type PropsType = DetailedHTMLProps<ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>
-export const Button: FC<PropsType> = ({ children, className, ...rest }) => {
+export const Button: FC<PropsType> = memo(({ children, className, ...rest }) => {
   const buttonStyles = cls.btn + (className ? ' ' + className : '')
 
   return (
@@ -11,4 +11,4 @@ export const Button: FC<PropsType> = ({ children, className, ...rest }) => {
       {children}
     </button>
   )
-}
+})
