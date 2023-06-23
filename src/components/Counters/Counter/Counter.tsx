@@ -12,16 +12,16 @@ type PropsType = {
 
 export const Counter: FC<PropsType> = memo(({ counter }) => {
   const {
+    status,
     currentValue,
     minValue,
-    onChangeMinValue,
     maxValue,
-    increment,
-    changeModeToSettings,
-    saveChanges,
-    reset,
+    onChangeMinValue,
     onChangeMaxValue,
-    status,
+    changeModeToSettings,
+    increment,
+    reset,
+    saveChanges,
   } = useCounterLogic(counter)
 
   return (
