@@ -11,10 +11,6 @@ export type AppThunkType<ReturnType = void> = ThunkAction<
   AnyAction
 >
 
-export type InferActionTypes<T> = T extends { [keys: string]: (...args: any[]) => infer U }
-  ? U
-  : never
-
 export type AppRootStateType = ReturnType<typeof store.getState>
 
 const rootReducer = combineReducers({
