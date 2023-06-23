@@ -1,14 +1,18 @@
-import { Dispatch } from 'redux'
 import { v1 } from 'uuid'
 
 import { CounterType } from '../../types'
-import { AppRootStateType, InferActionTypes } from '../index.ts'
+import { AppThunkType } from '../index.ts'
 
-type ActionsType = InferActionTypes<typeof actions>
+type ActionsType = typeof actions
+
+export type CountersActionsType = ReturnType<ActionsType[keyof ActionsType]>
 
 const initialState = [] as CounterType[]
 
-export const countersReducer = (state = initialState, action: ActionsType): CounterType[] => {
+export const countersReducer = (
+  state = initialState,
+  action: CountersActionsType
+): CounterType[] => {
   switch (action.type) {
     case 'GET-COUNTERS':
       return [...state, ...action.payload.counters]
@@ -34,14 +38,20 @@ export const actions = {
     ({ type: 'UPDATE-SETTINGS', payload: { id, minValue, maxValue } } as const),
 }
 
-export const getCounters = () => (dispatch: Dispatch) => {
-  const items = localStorage.getItem('counters')
+export const getCounters = (): AppThunkType => {
+  return dispatch => {
+    const counters = localStorage.getItem('counters')
 
-  items && dispatch(actions.getCounters(JSON.parse(items)))
+    counters && dispatch(actions.getCounters(JSON.parse(counters)))
+  }
 }
 
-export const updateSettings = (counterId: string, minValue: number, maxValue: number) => {
-  return (dispatch: Dispatch, getState: () => AppRootStateType) => {
+export const updateSettings = (
+  counterId: string,
+  minValue: number,
+  maxValue: number
+): AppThunkType => {
+  return (dispatch, getState) => {
     dispatch(actions.updateSettings(counterId, minValue, maxValue))
 
     const counters = getState().counters
@@ -50,8 +60,8 @@ export const updateSettings = (counterId: string, minValue: number, maxValue: nu
   }
 }
 
-export const addCounter = () => {
-  return (dispatch: Dispatch, getState: () => AppRootStateType) => {
+export const addCounter = (): AppThunkType => {
+  return (dispatch, getState) => {
     dispatch(actions.addCounter())
 
     const counters = getState().counters
