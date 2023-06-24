@@ -1,0 +1,9 @@
+@import '../../styles/base/mixins';
+
+.counters {
+  text-align: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(rem(320), 1fr));
+  gap: 2rem;
+  margin: 0 auto;
+}
