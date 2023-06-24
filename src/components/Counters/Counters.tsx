@@ -1,18 +1,16 @@
 import { useCallback, useEffect } from 'react'
 
-import { useDispatch, useSelector } from 'react-redux'
-
-import { AppDispatchType, AppRootStateType } from '../../store'
+import { useAppDispatch } from '../../hooks/useAppDispatch.ts'
+import { useAppSelector } from '../../hooks/useAppSelector.ts'
 import { addCounter, getCounters } from '../../store/reducers/countersReducer.ts'
-import { CounterType } from '../../types'
 import { Button } from '../Button/Button.tsx'
 
 import { Counter } from './Counter/Counter.tsx'
 import cls from './Counters.module.scss'
 
 export const Counters = () => {
-  const counters = useSelector<AppRootStateType, CounterType[]>(state => state.counters)
-  const dispatch = useDispatch<AppDispatchType>()
+  const counters = useAppSelector(state => state.counters)
+  const dispatch = useAppDispatch()
 
   useEffect(() => {
     dispatch(getCounters())
