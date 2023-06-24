@@ -15,7 +15,6 @@ export const Counters = () => {
     dispatch(getCounters())
   }, [])
 
-  // название поменять
   const addCounterCallback = useCallback(() => {
     dispatch(addCounter())
   }, [dispatch])
@@ -27,7 +26,7 @@ export const Counters = () => {
   return (
     <div className={cls.countersBlock}>
       <Button onClick={addCounterCallback}>Добавить счётчик</Button>
-      <div className={cls.counters}>{countersMap}</div>
+      {!!counters.length && <div className={cls.counters}>{countersMap}</div>}
     </div>
   )
 }
