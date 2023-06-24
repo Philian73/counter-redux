@@ -3,42 +3,61 @@ import { ChangeEvent, useCallback, useState } from 'react'
 import { useDispatch } from 'react-redux'
 
 import { AppDispatchType } from '../../../../store'
-import { removeCounter, updateSettings } from '../../../../store/reducers/countersReducer.ts'
-import { CounterInputModelType, CounterType } from '../../../../types'
+import {
+  decrement,
+  increment,
+  removeCounter,
+  reset,
+  updateSettings,
+} from '../../../../store/reducers/countersReducer.ts'
+import { CounterType } from '../../../../types'
+
+type CounterInputModelType = Omit<CounterType, 'id' | 'currentValue'>
+
+const statuses = {
+  settings: 'Настройка счётчика',
+}
 
 export const useCounterLogic = (counter: CounterType) => {
-  const [status, setStatus] = useState('')
+  const [status, setStatus] = useState(
+    counter.minValue === 0 && counter.maxValue === 0 ? statuses.settings : ''
+  )
   const [values, setValues] = useState<CounterInputModelType>({
     minValue: counter.minValue,
     maxValue: counter.maxValue,
-    currentValue: counter.minValue,
   })
 
-  const { minValue, maxValue, currentValue } = values
+  const { minValue, maxValue } = values
 
   const dispatch = useDispatch<AppDispatchType>()
 
-  const increment = () => {
-    if (currentValue < maxValue) {
-      setValues(prev => ({ ...prev, currentValue: prev.currentValue + 1 }))
+  const incrementCallback = useCallback(() => {
+    dispatch(increment(counter.id))
+  }, [dispatch, counter.id])
+  const decrementCallback = useCallback(() => {
+    dispatch(decrement(counter.id))
+  }, [dispatch, counter.id])
+  const resetCallback = useCallback(() => {
+    dispatch(reset(counter.id))
+  }, [dispatch, counter.id])
+  const changeModeCallback = useCallback(() => {
+    if (status) {
+      setStatus('')
+    } else {
+      setStatus(statuses.settings)
     }
-  }
-  const reset = () => {
-    setValues(prev => ({ ...prev, currentValue: minValue }))
-  }
-  const removeCounterCallback = useCallback(() => {
-    dispatch(removeCounter(counter.id))
-  }, [dispatch])
-  const changeModeToSettings = () => {
-    !status && setStatus('Настройка счётчика')
-  }
-  const saveChanges = () => {
+  }, [status])
+  const saveChangesCallback = useCallback(() => {
     if (minValue < maxValue) {
       dispatch(updateSettings(counter.id, minValue, maxValue))
       setStatus('')
-      reset()
+      resetCallback()
     }
-  }
+  }, [dispatch, counter.id, minValue, maxValue])
+
+  const removeCounterCallback = useCallback(() => {
+    dispatch(removeCounter(counter.id))
+  }, [dispatch])
 
   const onChangeMinValue = (e: ChangeEvent<HTMLInputElement>) => {
     const valueToNumber = Number(e.currentTarget.value)
@@ -55,21 +74,17 @@ export const useCounterLogic = (counter: CounterType) => {
     }
   }
 
-  if (counter.minValue === 0 && counter.maxValue === 0) {
-    changeModeToSettings()
-  }
-
   return {
     status,
-    currentValue,
     minValue,
     maxValue,
     onChangeMinValue,
     onChangeMaxValue,
-    changeModeToSettings,
-    increment,
-    reset,
+    changeModeCallback,
+    incrementCallback,
+    decrementCallback,
+    resetCallback,
     removeCounterCallback,
-    saveChanges,
+    saveChangesCallback,
   }
 }
