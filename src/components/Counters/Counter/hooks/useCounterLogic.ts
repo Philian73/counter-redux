@@ -1,8 +1,6 @@
-import { ChangeEvent, useCallback, useState } from 'react'
+import { KeyboardEvent, ChangeEvent, useCallback, useState } from 'react'
 
-import { useDispatch } from 'react-redux'
-
-import { AppDispatchType } from '../../../../store'
+import { useAppDispatch } from '../../../../hooks/useAppDispatch.ts'
 import {
   decrement,
   increment,
@@ -29,7 +27,7 @@ export const useCounterLogic = (counter: CounterType) => {
 
   const { minValue, maxValue } = values
 
-  const dispatch = useDispatch<AppDispatchType>()
+  const dispatch = useAppDispatch()
 
   const incrementCallback = useCallback(() => {
     dispatch(increment(counter.id))
@@ -39,6 +37,9 @@ export const useCounterLogic = (counter: CounterType) => {
   }, [dispatch, counter.id])
   const resetCallback = useCallback(() => {
     dispatch(reset(counter.id))
+  }, [dispatch, counter.id])
+  const removeCounterCallback = useCallback(() => {
+    dispatch(removeCounter(counter.id))
   }, [dispatch, counter.id])
   const changeModeCallback = useCallback(() => {
     if (status) {
@@ -55,10 +56,13 @@ export const useCounterLogic = (counter: CounterType) => {
     }
   }, [dispatch, counter.id, minValue, maxValue])
 
-  const removeCounterCallback = useCallback(() => {
-    dispatch(removeCounter(counter.id))
-  }, [dispatch])
+  const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+    const regex = /[.,]/
 
+    if (regex.test(e.key)) {
+      e.preventDefault()
+    }
+  }
   const onChangeMinValue = (e: ChangeEvent<HTMLInputElement>) => {
     const valueToNumber = Number(e.currentTarget.value)
 
@@ -78,13 +82,14 @@ export const useCounterLogic = (counter: CounterType) => {
     status,
     minValue,
     maxValue,
+    onKeyDownHandler,
     onChangeMinValue,
     onChangeMaxValue,
-    changeModeCallback,
     incrementCallback,
     decrementCallback,
     resetCallback,
     removeCounterCallback,
+    changeModeCallback,
     saveChangesCallback,
   }
 }

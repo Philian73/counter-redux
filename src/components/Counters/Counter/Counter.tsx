@@ -15,13 +15,14 @@ export const Counter: FC<PropsType> = memo(({ counter }) => {
     status,
     minValue,
     maxValue,
+    onKeyDownHandler,
     onChangeMinValue,
     onChangeMaxValue,
-    changeModeCallback,
     incrementCallback,
     decrementCallback,
     resetCallback,
     removeCounterCallback,
+    changeModeCallback,
     saveChangesCallback,
   } = useCounterLogic(counter)
 
@@ -44,11 +45,21 @@ export const Counter: FC<PropsType> = memo(({ counter }) => {
             <span>{status}</span>
             <label>
               <span>Мин.значение</span>
-              <input type="number" value={minValue} onChange={onChangeMinValue} />
+              <input
+                type="number"
+                value={minValue}
+                onChange={onChangeMinValue}
+                onKeyDown={onKeyDownHandler}
+              />
             </label>
             <label>
               <span>Макс.значение</span>
-              <input type="number" value={maxValue} onChange={onChangeMaxValue} />
+              <input
+                type="number"
+                value={maxValue}
+                onChange={onChangeMaxValue}
+                onKeyDown={onKeyDownHandler}
+              />
             </label>
           </>
         )}
