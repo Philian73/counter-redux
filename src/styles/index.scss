@@ -7,8 +7,7 @@ body {
 }
 
 .app {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
+  padding: rem(50) 0;
+  max-width: 900px;
+  margin: 0 auto;
 }
