@@ -1,14 +1,16 @@
-import { AnyAction, applyMiddleware, combineReducers, legacy_createStore } from 'redux'
+import { applyMiddleware, combineReducers, legacy_createStore } from 'redux'
 import thunk, { ThunkAction, ThunkDispatch } from 'redux-thunk'
 
-import { countersReducer } from './reducers/countersReducer.ts'
+import { CountersActionsType, countersReducer } from './reducers/countersReducer.ts'
 
-export type AppDispatchType = ThunkDispatch<AppRootStateType, unknown, AnyAction>
+type AllActionsType = CountersActionsType
+
+export type AppDispatchType = ThunkDispatch<AppRootStateType, unknown, AllActionsType>
 export type AppThunkType<ReturnType = void> = ThunkAction<
   ReturnType,
   AppRootStateType,
   unknown,
-  AnyAction
+  AllActionsType
 >
 
 export type AppRootStateType = ReturnType<typeof store.getState>
