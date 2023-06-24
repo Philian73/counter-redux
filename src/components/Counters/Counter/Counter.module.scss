@@ -4,11 +4,13 @@
   padding: 1rem;
   border: 3px solid #6fe0f8;
   background-color: #2d2a35;
-  width: em(435);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: rem(446);
 }
 
 .counterDisplay {
-  min-height: 12.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -33,10 +35,31 @@
 
 .counterControl {
   display: flex;
-  justify-content: center;
-  align-items: center;
   gap: 1rem;
   padding: 1rem;
   border-radius: 10px;
   border: 3px solid #6fe0f8;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.counterControl button {
+  flex: 1 1 45%;
+}
+
+.remove {
+  position: absolute;
+  width: 35px;
+  padding: 0;
+  top: 5%;
+  right: 6%;
+  &::before {
+    content: '';
+    position: absolute;
+    background: url('https://s1.iconbird.com/ico/2013/10/464/w512h5121380984608delete.png') 0 0 /
+      cover no-repeat;
+    width: 25px;
+    height: 25px;
+  }
 }
