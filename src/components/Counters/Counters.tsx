@@ -28,10 +28,8 @@ export const Counters = () => {
   })
 
   return (
-    <div>
-      <div>
-        <Button onClick={addCounterCallback}>Добавить счётчик</Button>
-      </div>
+    <div className={cls.countersBlock}>
+      <Button onClick={addCounterCallback}>Добавить счётчик</Button>
       <div className={cls.counters}>{countersMap}</div>
     </div>
   )
