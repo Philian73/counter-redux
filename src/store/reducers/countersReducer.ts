@@ -16,8 +16,26 @@ export const countersReducer = (
   switch (action.type) {
     case 'GET-COUNTERS':
       return [...state, ...action.payload.counters]
+    case 'INCREMENT':
+      return state.map(counter =>
+        counter.id === action.payload.counterId && counter.currentValue < counter.maxValue
+          ? { ...counter, currentValue: counter.currentValue + 1 }
+          : counter
+      )
+    case 'DECREMENT':
+      return state.map(counter =>
+        counter.id === action.payload.counterId && counter.currentValue > counter.minValue
+          ? { ...counter, currentValue: counter.currentValue - 1 }
+          : counter
+      )
+    case 'RESET':
+      return state.map(counter =>
+        counter.id === action.payload.counterId && counter.currentValue > counter.minValue
+          ? { ...counter, currentValue: counter.minValue }
+          : counter
+      )
     case 'ADD-COUNTER': {
-      return [...state, { id: v1(), minValue: 0, maxValue: 0 }]
+      return [...state, { id: v1(), minValue: 0, maxValue: 0, currentValue: 0 }]
     }
     case 'REMOVE-COUNTER': {
       return state.filter(counter => counter.id !== action.payload.counterId)
@@ -25,7 +43,12 @@ export const countersReducer = (
     case 'UPDATE-SETTINGS':
       return state.map(counter =>
         counter.id === action.payload.id
-          ? { ...counter, minValue: action.payload.minValue, maxValue: action.payload.maxValue }
+          ? {
+              ...counter,
+              minValue: action.payload.minValue,
+              maxValue: action.payload.maxValue,
+              currentValue: action.payload.minValue,
+            }
           : counter
       )
     default:
@@ -36,6 +59,9 @@ export const countersReducer = (
 export const actions = {
   getCounters: (counters: CounterType[]) =>
     ({ type: 'GET-COUNTERS', payload: { counters } } as const),
+  increment: (counterId: string) => ({ type: 'INCREMENT', payload: { counterId } } as const),
+  decrement: (counterId: string) => ({ type: 'DECREMENT', payload: { counterId } } as const),
+  reset: (counterId: string) => ({ type: 'RESET', payload: { counterId } } as const),
   addCounter: () => ({ type: 'ADD-COUNTER' } as const),
   removeCounter: (counterId: string) =>
     ({ type: 'REMOVE-COUNTER', payload: { counterId } } as const),
@@ -48,6 +74,36 @@ export const getCounters = (): AppThunkType => {
     const counters = localStorage.getItem('counters')
 
     counters && dispatch(actions.getCounters(JSON.parse(counters)))
+  }
+}
+
+export const increment = (counterId: string): AppThunkType => {
+  return (dispatch, getState) => {
+    dispatch(actions.increment(counterId))
+
+    const counters = getState().counters
+
+    localStorage.setItem('counters', JSON.stringify(counters))
+  }
+}
+
+export const decrement = (counterId: string): AppThunkType => {
+  return (dispatch, getState) => {
+    dispatch(actions.decrement(counterId))
+
+    const counters = getState().counters
+
+    localStorage.setItem('counters', JSON.stringify(counters))
+  }
+}
+
+export const reset = (counterId: string): AppThunkType => {
+  return (dispatch, getState) => {
+    dispatch(actions.reset(counterId))
+
+    const counters = getState().counters
+
+    localStorage.setItem('counters', JSON.stringify(counters))
   }
 }
 
