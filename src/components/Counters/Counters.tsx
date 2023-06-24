@@ -1,7 +1,6 @@
 import { useCallback, useEffect } from 'react'
 
-import { useAppDispatch } from '../../hooks/useAppDispatch.ts'
-import { useAppSelector } from '../../hooks/useAppSelector.ts'
+import { useAppDispatch, useAppSelector } from '../../hooks'
 import { addCounter, getCounters } from '../../store/reducers/countersReducer.ts'
 import { Button } from '../Button/Button.tsx'
 

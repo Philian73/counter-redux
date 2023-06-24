@@ -1,6 +1,6 @@
 import { KeyboardEvent, ChangeEvent, useCallback, useState } from 'react'
 
-import { useAppDispatch } from '../../../../hooks/useAppDispatch.ts'
+import { useAppDispatch } from '../../../../hooks'
 import {
   decrement,
   increment,
