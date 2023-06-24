@@ -1,9 +1,9 @@
-import { ChangeEvent, useState } from 'react'
+import { ChangeEvent, useCallback, useState } from 'react'
 
 import { useDispatch } from 'react-redux'
 
 import { AppDispatchType } from '../../../../store'
-import { updateSettings } from '../../../../store/reducers/countersReducer.ts'
+import { removeCounter, updateSettings } from '../../../../store/reducers/countersReducer.ts'
 import { CounterInputModelType, CounterType } from '../../../../types'
 
 export const useCounterLogic = (counter: CounterType) => {
@@ -26,6 +26,9 @@ export const useCounterLogic = (counter: CounterType) => {
   const reset = () => {
     setValues(prev => ({ ...prev, currentValue: minValue }))
   }
+  const removeCounterCallback = useCallback(() => {
+    dispatch(removeCounter(counter.id))
+  }, [dispatch])
   const changeModeToSettings = () => {
     !status && setStatus('Настройка счётчика')
   }
@@ -66,6 +69,7 @@ export const useCounterLogic = (counter: CounterType) => {
     changeModeToSettings,
     increment,
     reset,
+    removeCounterCallback,
     saveChanges,
   }
 }
