@@ -16,15 +16,18 @@ export const countersReducer = (
   switch (action.type) {
     case 'GET-COUNTERS':
       return [...state, ...action.payload.counters]
+    case 'ADD-COUNTER': {
+      return [...state, { id: v1(), minValue: 0, maxValue: 0 }]
+    }
+    case 'REMOVE-COUNTER': {
+      return state.filter(counter => counter.id !== action.payload.counterId)
+    }
     case 'UPDATE-SETTINGS':
       return state.map(counter =>
         counter.id === action.payload.id
           ? { ...counter, minValue: action.payload.minValue, maxValue: action.payload.maxValue }
           : counter
       )
-    case 'ADD-COUNTER': {
-      return [...state, { id: v1(), minValue: 0, maxValue: 0 }]
-    }
     default:
       return state
   }
@@ -34,6 +37,8 @@ export const actions = {
   getCounters: (counters: CounterType[]) =>
     ({ type: 'GET-COUNTERS', payload: { counters } } as const),
   addCounter: () => ({ type: 'ADD-COUNTER' } as const),
+  removeCounter: (counterId: string) =>
+    ({ type: 'REMOVE-COUNTER', payload: { counterId } } as const),
   updateSettings: (id: string, minValue: number, maxValue: number) =>
     ({ type: 'UPDATE-SETTINGS', payload: { id, minValue, maxValue } } as const),
 }
@@ -46,13 +51,9 @@ export const getCounters = (): AppThunkType => {
   }
 }
 
-export const updateSettings = (
-  counterId: string,
-  minValue: number,
-  maxValue: number
-): AppThunkType => {
+export const addCounter = (): AppThunkType => {
   return (dispatch, getState) => {
-    dispatch(actions.updateSettings(counterId, minValue, maxValue))
+    dispatch(actions.addCounter())
 
     const counters = getState().counters
 
@@ -60,9 +61,23 @@ export const updateSettings = (
   }
 }
 
-export const addCounter = (): AppThunkType => {
+export const removeCounter = (counterId: string): AppThunkType => {
   return (dispatch, getState) => {
-    dispatch(actions.addCounter())
+    dispatch(actions.removeCounter(counterId))
+
+    const counters = getState().counters
+
+    localStorage.setItem('counters', JSON.stringify(counters))
+  }
+}
+
+export const updateSettings = (
+  counterId: string,
+  minValue: number,
+  maxValue: number
+): AppThunkType => {
+  return (dispatch, getState) => {
+    dispatch(actions.updateSettings(counterId, minValue, maxValue))
 
     const counters = getState().counters
 
