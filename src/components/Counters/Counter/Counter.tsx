@@ -13,24 +13,32 @@ type PropsType = {
 export const Counter: FC<PropsType> = memo(({ counter }) => {
   const {
     status,
-    currentValue,
     minValue,
     maxValue,
     onChangeMinValue,
     onChangeMaxValue,
-    changeModeToSettings,
-    increment,
-    reset,
+    changeModeCallback,
+    incrementCallback,
+    decrementCallback,
+    resetCallback,
     removeCounterCallback,
-    saveChanges,
+    saveChangesCallback,
   } = useCounterLogic(counter)
+
+  const buttonDisabledConditions = {
+    inc: counter.currentValue === maxValue,
+    dec: counter.currentValue === minValue,
+    reset: counter.currentValue === minValue,
+    save: counter.minValue === minValue && counter.maxValue === maxValue,
+    back: counter.minValue === 0 && counter.maxValue === 0,
+  }
 
   return (
     <div className={cls.counter}>
       <Button className={cls.remove} onClick={removeCounterCallback}></Button>
       <div className={cls.counterDisplay}>
         {!status ? (
-          <span>{currentValue}</span>
+          <span>{counter.currentValue}</span>
         ) : (
           <>
             <span>{status}</span>
@@ -48,19 +56,26 @@ export const Counter: FC<PropsType> = memo(({ counter }) => {
       <div className={cls.counterControl}>
         {!status ? (
           <>
-            <Button onClick={increment} disabled={currentValue === maxValue}>
+            <Button onClick={incrementCallback} disabled={buttonDisabledConditions.inc}>
               inc
             </Button>
-            <Button onClick={increment} disabled={currentValue === maxValue}>
+            <Button onClick={decrementCallback} disabled={buttonDisabledConditions.dec}>
               dec
             </Button>
-            <Button onClick={reset} disabled={currentValue === minValue}>
+            <Button onClick={resetCallback} disabled={buttonDisabledConditions.reset}>
               reset
             </Button>
-            <Button onClick={changeModeToSettings}>set</Button>
+            <Button onClick={changeModeCallback}>set</Button>
           </>
         ) : (
-          <Button onClick={saveChanges}>save</Button>
+          <>
+            <Button onClick={changeModeCallback} disabled={buttonDisabledConditions.back}>
+              back
+            </Button>
+            <Button onClick={saveChangesCallback} disabled={buttonDisabledConditions.save}>
+              save
+            </Button>
+          </>
         )}
       </div>
     </div>
