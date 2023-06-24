@@ -21,11 +21,13 @@ export const Counter: FC<PropsType> = memo(({ counter }) => {
     changeModeToSettings,
     increment,
     reset,
+    removeCounterCallback,
     saveChanges,
   } = useCounterLogic(counter)
 
   return (
     <div className={cls.counter}>
+      <Button className={cls.remove} onClick={removeCounterCallback}></Button>
       <div className={cls.counterDisplay}>
         {!status ? (
           <span>{currentValue}</span>
@@ -48,6 +50,9 @@ export const Counter: FC<PropsType> = memo(({ counter }) => {
           <>
             <Button onClick={increment} disabled={currentValue === maxValue}>
               inc
+            </Button>
+            <Button onClick={increment} disabled={currentValue === maxValue}>
+              dec
             </Button>
             <Button onClick={reset} disabled={currentValue === minValue}>
               reset
