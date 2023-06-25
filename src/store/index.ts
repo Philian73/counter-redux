@@ -21,5 +21,9 @@ const rootReducer = combineReducers({
 
 export const store = legacy_createStore(rootReducer, applyMiddleware(thunk))
 
+// preloaded state
+// store.subscribe(() => {
+//   localStorage.setItem('key', store.getState())
+// })
 // @ts-ignore
 window.__store__ = store

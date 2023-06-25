@@ -32,12 +32,15 @@ export const useCounterLogic = (counter: CounterType) => {
   const incrementCallback = useCallback(() => {
     dispatch(increment(counter.id))
   }, [dispatch, counter.id])
+
   const decrementCallback = useCallback(() => {
     dispatch(decrement(counter.id))
   }, [dispatch, counter.id])
+
   const resetCallback = useCallback(() => {
     dispatch(reset(counter.id))
   }, [dispatch, counter.id])
+
   const removeCounterCallback = useCallback(() => {
     dispatch(removeCounter(counter.id))
   }, [dispatch, counter.id])

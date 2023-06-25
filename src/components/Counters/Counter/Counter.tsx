@@ -36,7 +36,7 @@ export const Counter: FC<PropsType> = memo(({ counter }) => {
 
   return (
     <div className={cls.counter}>
-      <Button className={cls.remove} onClick={removeCounterCallback}></Button>
+      <Button className={cls.remove} onClick={removeCounterCallback} />
       <div className={cls.counterDisplay}>
         {!status ? (
           <span>{counter.currentValue}</span>
