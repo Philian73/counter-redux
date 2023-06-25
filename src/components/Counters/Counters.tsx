@@ -3,7 +3,7 @@ import { useCallback, useEffect } from 'react'
 import { useAppDispatch, useAppSelector } from '../../hooks'
 import { addCounter, getCounters } from '../../store/reducers/countersReducer.ts'
 import { CounterType } from '../../types'
-import { Button } from '../Button/Button.tsx'
+import { Button } from '../../UI-Kit/Button/Button.tsx'
 
 import { Counter } from './Counter/Counter.tsx'
 import cls from './Counters.module.scss'

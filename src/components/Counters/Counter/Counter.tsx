@@ -1,7 +1,7 @@
 import { FC, memo } from 'react'
 
 import { CounterType } from '../../../types'
-import { Button } from '../../Button/Button.tsx'
+import { Button } from '../../../UI-Kit/Button/Button.tsx'
 
 import cls from './Counter.module.scss'
 import { useCounterLogic } from './hooks/useCounterLogic.ts'
