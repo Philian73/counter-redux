@@ -1,5 +1,6 @@
 import { v1 } from 'uuid'
 
+import { countersAPI } from '../../api/countersAPI.ts'
 import { CounterType } from '../../types'
 import { AppThunkType } from '../index.ts'
 
@@ -71,9 +72,7 @@ export const actions = {
 
 export const getCounters = (): AppThunkType => {
   return dispatch => {
-    const counters = localStorage.getItem('counters')
-
-    counters && dispatch(actions.getCounters(JSON.parse(counters)))
+    dispatch(actions.getCounters(countersAPI.getState()))
   }
 }
 
@@ -83,7 +82,7 @@ export const increment = (counterId: string): AppThunkType => {
 
     const counters = getState().counters
 
-    localStorage.setItem('counters', JSON.stringify(counters))
+    countersAPI.saveState(counters)
   }
 }
 
@@ -93,7 +92,7 @@ export const decrement = (counterId: string): AppThunkType => {
 
     const counters = getState().counters
 
-    localStorage.setItem('counters', JSON.stringify(counters))
+    countersAPI.saveState(counters)
   }
 }
 
@@ -103,7 +102,7 @@ export const reset = (counterId: string): AppThunkType => {
 
     const counters = getState().counters
 
-    localStorage.setItem('counters', JSON.stringify(counters))
+    countersAPI.saveState(counters)
   }
 }
 
@@ -113,7 +112,7 @@ export const addCounter = (): AppThunkType => {
 
     const counters = getState().counters
 
-    localStorage.setItem('counters', JSON.stringify(counters))
+    countersAPI.saveState(counters)
   }
 }
 
@@ -123,7 +122,7 @@ export const removeCounter = (counterId: string): AppThunkType => {
 
     const counters = getState().counters
 
-    localStorage.setItem('counters', JSON.stringify(counters))
+    countersAPI.saveState(counters)
   }
 }
 
@@ -137,6 +136,6 @@ export const updateSettings = (
 
     const counters = getState().counters
 
-    localStorage.setItem('counters', JSON.stringify(counters))
+    countersAPI.saveState(counters)
   }
 }
