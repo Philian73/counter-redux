@@ -39,7 +39,7 @@ export const countersReducer = (
       return [...state, { id: v1(), minValue: 0, maxValue: 0, currentValue: 0 }]
     }
     case 'REMOVE-COUNTER': {
-      return state.filter(counter => counter.id !== action.payload.counterId)
+      return state.filter(counter => counter.id !== action.payload.id)
     }
     case 'UPDATE-SETTINGS':
       return state.map(counter =>
@@ -64,15 +64,16 @@ export const actions = {
   decrement: (counterId: string) => ({ type: 'DECREMENT', payload: { counterId } } as const),
   reset: (counterId: string) => ({ type: 'RESET', payload: { counterId } } as const),
   addCounter: () => ({ type: 'ADD-COUNTER' } as const),
-  removeCounter: (counterId: string) =>
-    ({ type: 'REMOVE-COUNTER', payload: { counterId } } as const),
+  removeCounter: (id: string) => ({ type: 'REMOVE-COUNTER', payload: { id } } as const),
   updateSettings: (id: string, minValue: number, maxValue: number) =>
     ({ type: 'UPDATE-SETTINGS', payload: { id, minValue, maxValue } } as const),
 }
 
 export const getCounters = (): AppThunkType => {
   return dispatch => {
-    dispatch(actions.getCounters(countersAPI.getState()))
+    const state = countersAPI.getState()
+
+    state && dispatch(actions.getCounters(state))
   }
 }
 
@@ -116,9 +117,9 @@ export const addCounter = (): AppThunkType => {
   }
 }
 
-export const removeCounter = (counterId: string): AppThunkType => {
+export const removeCounter = (id: string): AppThunkType => {
   return (dispatch, getState) => {
-    dispatch(actions.removeCounter(counterId))
+    dispatch(actions.removeCounter(id))
 
     const counters = getState().counters
 
