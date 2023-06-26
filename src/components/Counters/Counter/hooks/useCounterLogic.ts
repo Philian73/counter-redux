@@ -1,6 +1,6 @@
 import { ChangeEvent, useCallback, useState } from 'react'
 
-import { useAppDispatch } from '../../../../hooks'
+import { useAppDispatch } from '../../../../hooks/hooks.ts'
 import {
   decrement,
   increment,
