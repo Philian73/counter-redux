@@ -24,7 +24,6 @@ export const useCounterLogic = (counter: CounterType) => {
     minValue: counter.minValue,
     maxValue: counter.maxValue,
   })
-
   const { minValue, maxValue } = values
 
   const dispatch = useAppDispatch()
@@ -44,6 +43,7 @@ export const useCounterLogic = (counter: CounterType) => {
   const removeCounterCallback = useCallback(() => {
     dispatch(removeCounter(counter.id))
   }, [dispatch, counter.id])
+
   const changeModeCallback = useCallback(() => {
     if (status) {
       setStatus('')
@@ -51,6 +51,7 @@ export const useCounterLogic = (counter: CounterType) => {
       setStatus(statuses.settings)
     }
   }, [status])
+
   const saveChangesCallback = useCallback(() => {
     if (minValue < maxValue) {
       dispatch(updateSettings(counter.id, minValue, maxValue))
@@ -59,27 +60,30 @@ export const useCounterLogic = (counter: CounterType) => {
     }
   }, [dispatch, counter.id, minValue, maxValue])
 
-  const onChangeMinValue = (e: ChangeEvent<HTMLInputElement>) => {
-    const valueToNumber = Number(e.currentTarget.value)
+  const onChangeMinValueCallback = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const valueToNumber = Number(e.currentTarget.value)
 
-    if (valueToNumber > -1 && valueToNumber < maxValue) {
-      setValues(prev => ({ ...prev, minValue: valueToNumber }))
-    }
-  }
-  const onChangeMaxValue = (e: ChangeEvent<HTMLInputElement>) => {
-    const valueToNumber = Number(e.currentTarget.value)
+      valueToNumber >= -1 && setValues(prev => ({ ...prev, minValue: valueToNumber }))
+    },
+    [minValue]
+  )
 
-    if (valueToNumber > minValue) {
-      setValues(prev => ({ ...prev, maxValue: valueToNumber }))
-    }
-  }
+  const onChangeMaxValueCallback = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const valueToNumber = Number(e.currentTarget.value)
+
+      valueToNumber >= 0 && setValues(prev => ({ ...prev, maxValue: valueToNumber }))
+    },
+    [maxValue]
+  )
 
   return {
     status,
     minValue,
     maxValue,
-    onChangeMinValue,
-    onChangeMaxValue,
+    onChangeMinValueCallback,
+    onChangeMaxValueCallback,
     incrementCallback,
     decrementCallback,
     resetCallback,
