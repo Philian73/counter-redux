@@ -16,8 +16,8 @@ export const Counter: FC<PropsType> = memo(({ counter }) => {
     status,
     minValue,
     maxValue,
-    onChangeMinValue,
-    onChangeMaxValue,
+    onChangeMinValueCallback,
+    onChangeMaxValueCallback,
     incrementCallback,
     decrementCallback,
     resetCallback,
@@ -30,12 +30,15 @@ export const Counter: FC<PropsType> = memo(({ counter }) => {
     inc: counter.currentValue === maxValue,
     dec: counter.currentValue === minValue,
     reset: counter.currentValue === minValue,
-    save: counter.minValue === minValue && counter.maxValue === maxValue,
+    save:
+      (counter.minValue === minValue && counter.maxValue === maxValue) ||
+      (minValue <= 0 && maxValue === 0),
     back: counter.minValue === 0 && counter.maxValue === 0,
   }
 
-  const styles = {
-    currentValue: counter.currentValue === counter.maxValue ? cls.limit : '',
+  const errors = {
+    minValue: minValue === -1,
+    maxValue: maxValue <= minValue,
   }
 
   return (
@@ -43,23 +46,25 @@ export const Counter: FC<PropsType> = memo(({ counter }) => {
       <Button className={cls.remove} onClick={removeCounterCallback} />
       <div className={cls.counterDisplay}>
         {!status ? (
-          <span className={styles.currentValue}>{counter.currentValue}</span>
+          <span className={counter.currentValue === counter.maxValue ? cls.limit : ''}>
+            {counter.currentValue}
+          </span>
         ) : (
           <>
             <span>{status}</span>
             <LabelInputNumber
               value={minValue}
-              onChange={onChangeMinValue}
-              error={minValue >= maxValue || minValue <= -1}
+              onChange={onChangeMinValueCallback}
+              error={errors.minValue}
             >
               Мин.значение
             </LabelInputNumber>
             <LabelInputNumber
               value={maxValue}
-              onChange={onChangeMaxValue}
-              error={maxValue <= minValue}
+              onChange={onChangeMaxValueCallback}
+              error={errors.maxValue}
             >
-              Мин.значение
+              Макс.значение
             </LabelInputNumber>
           </>
         )}
