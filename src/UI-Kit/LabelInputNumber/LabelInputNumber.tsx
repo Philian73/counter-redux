@@ -1,4 +1,4 @@
-import { KeyboardEvent, DetailedHTMLProps, FC, InputHTMLAttributes, ReactNode } from 'react'
+import { KeyboardEvent, DetailedHTMLProps, FC, InputHTMLAttributes, ReactNode, memo } from 'react'
 
 import cls from './LabelInputNumber.module.scss'
 
@@ -12,33 +12,28 @@ type PropsType = Omit<DefaultInputPropsType, 'type'> & {
   error: boolean
   spanClassName?: string
 }
-export const LabelInputNumber: FC<PropsType> = ({
-  children,
-  error,
-  spanClassName,
-  className,
-  onKeyDown,
-  ...rest
-}) => {
-  const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    onKeyDown?.(e)
+export const LabelInputNumber: FC<PropsType> = memo(
+  ({ children, error, spanClassName, className, onKeyDown, ...rest }) => {
+    const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
+      onKeyDown?.(e)
 
-    const regex = /[.,]/
+      const regex = /[.,]/
 
-    if (regex.test(e.key)) {
-      e.preventDefault()
+      if (regex.test(e.key)) {
+        e.preventDefault()
+      }
     }
-  }
 
-  const styles = {
-    span: cls.span + (spanClassName ? ' ' + spanClassName : ''),
-    input: cls.input + (error ? ' ' + cls.error : '') + (className ? ' ' + className : ''),
-  }
+    const styles = {
+      span: cls.span + (spanClassName ? ' ' + spanClassName : ''),
+      input: cls.input + (error ? ' ' + cls.error : '') + (className ? ' ' + className : ''),
+    }
 
-  return (
-    <label>
-      <span className={styles.span}>{children}</span>
-      <input className={styles.input} type="number" onKeyDown={onKeyDownHandler} {...rest} />
-    </label>
-  )
-}
+    return (
+      <label>
+        <span className={styles.span}>{children}</span>
+        <input className={styles.input} type="number" onKeyDown={onKeyDownHandler} {...rest} />
+      </label>
+    )
+  }
+)
