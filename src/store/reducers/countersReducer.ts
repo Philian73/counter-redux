@@ -1,8 +1,6 @@
 import { v1 } from 'uuid'
 
-import { countersAPI } from '../../api/countersAPI.ts'
 import { CounterType } from '../../types'
-import { AppThunkType } from '../index.ts'
 
 type ActionsType = typeof actions
 
@@ -67,76 +65,4 @@ export const actions = {
   removeCounter: (id: string) => ({ type: 'REMOVE-COUNTER', payload: { id } } as const),
   updateSettings: (id: string, minValue: number, maxValue: number) =>
     ({ type: 'UPDATE-SETTINGS', payload: { id, minValue, maxValue } } as const),
-}
-
-export const getCounters = (): AppThunkType => {
-  return dispatch => {
-    const state = countersAPI.getState()
-
-    state && dispatch(actions.getCounters(state))
-  }
-}
-
-export const increment = (counterId: string): AppThunkType => {
-  return (dispatch, getState) => {
-    dispatch(actions.increment(counterId))
-
-    const counters = getState().counters
-
-    countersAPI.saveState(counters)
-  }
-}
-
-export const decrement = (counterId: string): AppThunkType => {
-  return (dispatch, getState) => {
-    dispatch(actions.decrement(counterId))
-
-    const counters = getState().counters
-
-    countersAPI.saveState(counters)
-  }
-}
-
-export const reset = (counterId: string): AppThunkType => {
-  return (dispatch, getState) => {
-    dispatch(actions.reset(counterId))
-
-    const counters = getState().counters
-
-    countersAPI.saveState(counters)
-  }
-}
-
-export const addCounter = (): AppThunkType => {
-  return (dispatch, getState) => {
-    dispatch(actions.addCounter())
-
-    const counters = getState().counters
-
-    countersAPI.saveState(counters)
-  }
-}
-
-export const removeCounter = (id: string): AppThunkType => {
-  return (dispatch, getState) => {
-    dispatch(actions.removeCounter(id))
-
-    const counters = getState().counters
-
-    countersAPI.saveState(counters)
-  }
-}
-
-export const updateSettings = (
-  counterId: string,
-  minValue: number,
-  maxValue: number
-): AppThunkType => {
-  return (dispatch, getState) => {
-    dispatch(actions.updateSettings(counterId, minValue, maxValue))
-
-    const counters = getState().counters
-
-    countersAPI.saveState(counters)
-  }
 }

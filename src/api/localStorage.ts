@@ -1,8 +1,8 @@
-export const countersAPI = {
-  getState: () => {
+export const countersLocalStorage = {
+  loadState: () => {
     const counters = localStorage.getItem('counters')
 
-    if (counters !== null) return JSON.parse(counters)
+    return counters !== null ? JSON.parse(counters) : undefined
   },
   saveState: <T>(state: T) => {
     localStorage.setItem('counters', JSON.stringify(state))

@@ -1,13 +1,7 @@
 import { ChangeEvent, useCallback, useState } from 'react'
 
 import { useAppDispatch } from '../../../../hooks/hooks.ts'
-import {
-  decrement,
-  increment,
-  removeCounter,
-  reset,
-  updateSettings,
-} from '../../../../store/reducers/countersReducer.ts'
+import { actions } from '../../../../store/reducers/countersReducer.ts'
 import { CounterType } from '../../../../types'
 
 type CounterInputModelType = Omit<CounterType, 'id' | 'currentValue'>
@@ -29,19 +23,19 @@ export const useCounterLogic = (counter: CounterType) => {
   const dispatch = useAppDispatch()
 
   const incrementCallback = useCallback(() => {
-    dispatch(increment(counter.id))
+    dispatch(actions.increment(counter.id))
   }, [dispatch, counter.id])
 
   const decrementCallback = useCallback(() => {
-    dispatch(decrement(counter.id))
+    dispatch(actions.decrement(counter.id))
   }, [dispatch, counter.id])
 
   const resetCallback = useCallback(() => {
-    dispatch(reset(counter.id))
+    dispatch(actions.reset(counter.id))
   }, [dispatch, counter.id])
 
   const removeCounterCallback = useCallback(() => {
-    dispatch(removeCounter(counter.id))
+    dispatch(actions.removeCounter(counter.id))
   }, [dispatch, counter.id])
 
   const changeModeCallback = useCallback(() => {
@@ -54,7 +48,7 @@ export const useCounterLogic = (counter: CounterType) => {
 
   const saveChangesCallback = useCallback(() => {
     if (minValue < maxValue) {
-      dispatch(updateSettings(counter.id, minValue, maxValue))
+      dispatch(actions.updateSettings(counter.id, minValue, maxValue))
       setStatus('')
       resetCallback()
     }

@@ -1,29 +1,29 @@
-import { applyMiddleware, combineReducers, legacy_createStore } from 'redux'
-import thunk, { ThunkAction, ThunkDispatch } from 'redux-thunk'
+import { throttle } from 'lodash'
+import { combineReducers, legacy_createStore } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
+
+import { countersLocalStorage } from '../api/localStorage.ts'
 
 import { CountersActionsType, countersReducer } from './reducers/countersReducer.ts'
 
 type AllActionsType = CountersActionsType
 
-export type AppDispatchType = ThunkDispatch<AppRootStateType, unknown, AllActionsType>
-export type AppThunkType<ReturnType = void> = ThunkAction<
-  ReturnType,
-  AppRootStateType,
-  unknown,
-  AllActionsType
->
-
 export type AppRootStateType = ReturnType<typeof store.getState>
+
+export type AppDispatchType = ThunkDispatch<AppRootStateType, unknown, AllActionsType>
 
 const rootReducer = combineReducers({
   counters: countersReducer,
 })
 
-export const store = legacy_createStore(rootReducer, applyMiddleware(thunk))
+const preloadedState = {
+  counters: countersLocalStorage.loadState(),
+}
 
-// preloaded state
-// store.subscribe(() => {
-//   localStorage.setItem('key', store.getState())
-// })
-// @ts-ignore
-window.__store__ = store
+export const store = legacy_createStore(rootReducer, preloadedState)
+
+store.subscribe(
+  throttle(() => {
+    countersLocalStorage.saveState(store.getState().counters)
+  }, 1000)
+)
