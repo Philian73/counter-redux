@@ -13,6 +13,7 @@ type PropsType = {
 
 export const Counter: FC<PropsType> = memo(({ counter }) => {
   const {
+    conditions,
     status,
     minValue,
     maxValue,
@@ -25,21 +26,6 @@ export const Counter: FC<PropsType> = memo(({ counter }) => {
     changeModeCallback,
     saveChangesCallback,
   } = useCounterLogic(counter)
-
-  const buttonDisabledConditions = {
-    inc: counter.currentValue === maxValue,
-    dec: counter.currentValue === minValue,
-    reset: counter.currentValue === minValue,
-    save:
-      (counter.minValue === minValue && counter.maxValue === maxValue) ||
-      (minValue <= 0 && maxValue === 0),
-    back: counter.minValue === 0 && counter.maxValue === 0,
-  }
-
-  const errors = {
-    minValue: minValue === -1,
-    maxValue: maxValue <= minValue,
-  }
 
   return (
     <div className={cls.counter}>
@@ -55,14 +41,14 @@ export const Counter: FC<PropsType> = memo(({ counter }) => {
             <LabelInputNumber
               value={minValue}
               onChange={onChangeMinValueCallback}
-              error={errors.minValue}
+              error={conditions.minValue}
             >
               Мин.значение
             </LabelInputNumber>
             <LabelInputNumber
               value={maxValue}
               onChange={onChangeMaxValueCallback}
-              error={errors.maxValue}
+              error={conditions.maxValue}
             >
               Макс.значение
             </LabelInputNumber>
@@ -72,23 +58,23 @@ export const Counter: FC<PropsType> = memo(({ counter }) => {
       <div className={cls.counterControl}>
         {!status ? (
           <>
-            <Button onClick={incrementCallback} disabled={buttonDisabledConditions.inc}>
+            <Button onClick={incrementCallback} disabled={conditions.inc}>
               inc
             </Button>
-            <Button onClick={decrementCallback} disabled={buttonDisabledConditions.dec}>
+            <Button onClick={decrementCallback} disabled={conditions.dec}>
               dec
             </Button>
-            <Button onClick={resetCallback} disabled={buttonDisabledConditions.reset}>
+            <Button onClick={resetCallback} disabled={conditions.reset}>
               reset
             </Button>
             <Button onClick={changeModeCallback}>set</Button>
           </>
         ) : (
           <>
-            <Button onClick={changeModeCallback} disabled={buttonDisabledConditions.back}>
+            <Button onClick={changeModeCallback} disabled={conditions.back}>
               back
             </Button>
-            <Button onClick={saveChangesCallback} disabled={buttonDisabledConditions.save}>
+            <Button onClick={saveChangesCallback} disabled={conditions.save}>
               save
             </Button>
           </>

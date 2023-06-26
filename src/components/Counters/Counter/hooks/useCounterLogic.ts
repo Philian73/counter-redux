@@ -78,7 +78,21 @@ export const useCounterLogic = (counter: CounterType) => {
     [maxValue]
   )
 
+  const conditions = {
+    inc: counter.currentValue === maxValue,
+    dec: counter.currentValue === minValue,
+    reset: counter.currentValue === minValue,
+    save:
+      (counter.minValue === minValue && counter.maxValue === maxValue) ||
+      minValue < 0 ||
+      maxValue <= minValue,
+    back: counter.minValue === 0 && counter.maxValue === 0,
+    minValue: minValue === -1,
+    maxValue: maxValue <= minValue,
+  }
+
   return {
+    conditions,
     status,
     minValue,
     maxValue,
