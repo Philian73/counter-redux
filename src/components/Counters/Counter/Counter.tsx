@@ -2,6 +2,7 @@ import { FC, memo } from 'react'
 
 import { CounterType } from '../../../types'
 import { Button } from '../../../UI-Kit/Button/Button.tsx'
+import { LabelInputNumber } from '../../../UI-Kit/LabelInputNumber/LabelInputNumber.tsx'
 
 import cls from './Counter.module.scss'
 import { useCounterLogic } from './hooks/useCounterLogic.ts'
@@ -15,7 +16,6 @@ export const Counter: FC<PropsType> = memo(({ counter }) => {
     status,
     minValue,
     maxValue,
-    onKeyDownHandler,
     onChangeMinValue,
     onChangeMaxValue,
     incrementCallback,
@@ -34,33 +34,33 @@ export const Counter: FC<PropsType> = memo(({ counter }) => {
     back: counter.minValue === 0 && counter.maxValue === 0,
   }
 
+  const styles = {
+    currentValue: counter.currentValue === counter.maxValue ? cls.limit : '',
+  }
+
   return (
     <div className={cls.counter}>
       <Button className={cls.remove} onClick={removeCounterCallback} />
       <div className={cls.counterDisplay}>
         {!status ? (
-          <span>{counter.currentValue}</span>
+          <span className={styles.currentValue}>{counter.currentValue}</span>
         ) : (
           <>
             <span>{status}</span>
-            <label>
-              <span>Мин.значение</span>
-              <input
-                type="number"
-                value={minValue}
-                onChange={onChangeMinValue}
-                onKeyDown={onKeyDownHandler}
-              />
-            </label>
-            <label>
-              <span>Макс.значение</span>
-              <input
-                type="number"
-                value={maxValue}
-                onChange={onChangeMaxValue}
-                onKeyDown={onKeyDownHandler}
-              />
-            </label>
+            <LabelInputNumber
+              value={minValue}
+              onChange={onChangeMinValue}
+              error={minValue >= maxValue || minValue <= -1}
+            >
+              Мин.значение
+            </LabelInputNumber>
+            <LabelInputNumber
+              value={maxValue}
+              onChange={onChangeMaxValue}
+              error={maxValue <= minValue}
+            >
+              Мин.значение
+            </LabelInputNumber>
           </>
         )}
       </div>
