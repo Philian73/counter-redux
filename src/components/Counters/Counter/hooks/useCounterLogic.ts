@@ -1,4 +1,4 @@
-import { KeyboardEvent, ChangeEvent, useCallback, useState } from 'react'
+import { ChangeEvent, useCallback, useState } from 'react'
 
 import { useAppDispatch } from '../../../../hooks'
 import {
@@ -59,13 +59,6 @@ export const useCounterLogic = (counter: CounterType) => {
     }
   }, [dispatch, counter.id, minValue, maxValue])
 
-  const onKeyDownHandler = (e: KeyboardEvent<HTMLInputElement>) => {
-    const regex = /[.,]/
-
-    if (regex.test(e.key)) {
-      e.preventDefault()
-    }
-  }
   const onChangeMinValue = (e: ChangeEvent<HTMLInputElement>) => {
     const valueToNumber = Number(e.currentTarget.value)
 
@@ -85,7 +78,6 @@ export const useCounterLogic = (counter: CounterType) => {
     status,
     minValue,
     maxValue,
-    onKeyDownHandler,
     onChangeMinValue,
     onChangeMaxValue,
     incrementCallback,
